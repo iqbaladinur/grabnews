@@ -40,16 +40,38 @@ class Grab extends CI_Controller {
 			 */
 			$p 	  = $div1->find('p',0)->innertext;
 
-			$output[] = array(
+			$output = array(
 				'url' 	  => $url,
 				'title'	  => $title,
-				'img-src' => $img,
+				'img_src' => $img,
 				'tgl'	  => $tgl,
 				'headline'=> $p
 			);
+
+			if ($this->cek($output['url'])) {
+				$this->db->insert('okezone',$output);
+			}
 		}
 		print '<pre>';
-		print_r($output);
+		print_r('horee');
 		print '</pre>';
+
+		//$this->db->insert_batch('okezone',$output);
+		
+
+	
+    }
+
+    private function cek($url)
+    {
+    	$this->db->select('url')->from('okezone')->where('url',$url)->get();
+    	
+    	if ($this->db->affected_rows() > 0) {
+    		return false;
+    	}else{
+    		return true;
+    	}
+
+
     }
 }
